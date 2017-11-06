@@ -1,15 +1,22 @@
 (function () {
+	
 	scheduler.locale.labels.section_text = 'Name';
 	scheduler.locale.labels.section_room = 'Room';
 	scheduler.locale.labels.section_status = 'Status';
 	scheduler.locale.labels.section_is_paid = 'Paid';
 	scheduler.locale.labels.section_time = 'Time';
+	 
 	scheduler.xy.scale_height = 30;
 	scheduler.config.details_on_create = true;
 	scheduler.config.details_on_dblclick = true;
 	scheduler.config.prevent_cache = true;
 	scheduler.config.show_loading = true;
 	scheduler.config.xml_date = "%Y-%m-%d %H:%i";
+	scheduler.config.multisection = true; 
+	scheduler.config.max_month_events = 3;
+	scheduler.config.resize_month_events = true;
+	scheduler.config.resize_month_timed= true;  
+
 
 	var roomsArr = scheduler.serverList("room");
 	var roomTypesArr = scheduler.serverList("roomType");
@@ -25,9 +32,10 @@
 	];
 
 	scheduler.locale.labels.timeline_tab = 'Timeline';
+ 
 
 	scheduler.createTimelineView({
-		fit_events: true,
+	//	fit_events: true,
 		name: "timeline",
 		y_property: "room",
 		render: 'bar',
@@ -36,15 +44,15 @@
 		x_size: 45,
 		dy: 52,
 		event_dy: 48,
-		section_autoheight: false,
-		round_position: true,
-
+		section_autoheight: true,
+		round_position: false,
 		y_unit: scheduler.serverList("currentRooms"),
 		second_scale: {
 			x_unit: "month",
-			x_date: "%F %Y"
+     		x_date: "%F %Y"
 		}
 	});
+ 
 
 	function findInArray(array, key) {
 		for (var i = 0; i < array.length; i++) {
@@ -68,14 +76,15 @@
 
 	scheduler.templates.timeline_scale_label = function (key, label, section) {
 		var roomStatus = getRoomStatus(section.status);
-		return ["<div class='timeline_item_separator'></div>",
+		return [
+			// "<div class='timeline_item_separator'></div>",
 			"<div class='timeline_item_cell'>" + label + "</div>",
-			"<div class='timeline_item_separator'></div>",
-			"<div class='timeline_item_cell'>" + getRoomType(section.type) + "</div>",
-			"<div class='timeline_item_separator'></div>",
-			"<div class='timeline_item_cell room_status'>",
-			"<span class='room_status_indicator room_status_indicator_" + roomStatus.key + "'></span>",
-			"<span class='status-label'>" + roomStatus.label + "</span>",
+			// "<div class='timeline_item_separator'></div>",
+			// "<div class='timeline_item_cell'>" + getRoomType(section.type) + "</div>",
+			// "<div class='timeline_item_separator'></div>",
+			// "<div class='timeline_item_cell room_status'>",
+			// "<span class='room_status_indicator room_status_indicator_" + roomStatus.key + "'></span>",
+			// "<span class='status-label'>" + roomStatus.label + "</span>",
 			"</div>"].join("");
 	};
 
@@ -130,7 +139,7 @@
 	};
 
 	scheduler.templates.lightbox_header = function (start, end, ev) {
-		var formatFunc = scheduler.date.date_to_str('%d.%m.%Y');
+		var formatFunc = scheduler.date.date_to_str('%d.%m.%Y %H:%i');
 		return formatFunc(start) + " - " + formatFunc(end);
 	};
 
@@ -209,11 +218,11 @@ function init() {
 		header.style.height = height + "px";
 
 		var descriptionHTML = "<div class='timeline_item_separator'></div>" +
-			"<div class='timeline_item_cell'>Number</div>" +
-			"<div class='timeline_item_separator'></div>" +
-			"<div class='timeline_item_cell'>Type</div>" +
-			"<div class='timeline_item_separator'></div>" +
-			"<div class='timeline_item_cell room_status'>Status</div>";
+			"<div class='timeline_item_cell'>Room No</div>" ;
+			// "<div class='timeline_item_separator'></div>" +
+			// "<div class='timeline_item_cell'>Type</div>" +
+			// "<div class='timeline_item_separator'></div>" +
+			// "<div class='timeline_item_cell room_status'>Status</div>";
 		header.innerHTML = descriptionHTML;
 		element.appendChild(header);
 	})();
